@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title>Uber and Taxi Data Vizualization</title>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=10" />
+	<link rel="stylesheet" type="text/css" href="./css/style.css">
+	</link>
+</head>
+
+<body>
+	<div id="controls">
+		<h1>Motor Vehicle Collisions</h1>
+		<div id="buttons">
+			<button class="active" type="button">Uber</button>
+			<button type="button">Taxi</button>
+		</div>
+		<div id="inner_controls"></div>
+		<div class="mono footer">
+			Albert Tang &middot;
+			Data from
+			<a
+				target="_blank"
+				rel="noopener noreferrer"
+				href="https://www1.nyc.gov/site/tlc/about/tlc-trip-record-data.page">
+				NYC Gov (Taxi)</a>
+			&
+			<a
+				target="_blank"
+				rel="noopener noreferrer"
+				href="https://github.com/fivethirtyeight/uber-tlc-foil-response">
+				Uber</a>
+		</div>
+	</div>
+	<div id="map_container"></div>
+	<div id="tooltip"></div>
+	<script src="//d3js.org/d3.v5.min.js"></script>
+	<script src="//cdn.jsdelivr.net/npm/flatpickr"></script>
+	<script src="//unpkg.com/dayjs"></script>
+	<script src="./js/create.js"></script>
+</body>
+
+</html>
