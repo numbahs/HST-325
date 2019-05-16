@@ -160,8 +160,8 @@ a {
 }
 
 .night {
-  fill: rgba(0, 0, 0, 0.4);
-  stroke: black;
+  fill: rgba(180, 142, 173, 0.4);
+  stroke: #b48ead;
   stroke-width: 0.5px;
 }
 
@@ -203,7 +203,7 @@ a {
 }
 
 .night::before {
-  background-color: black;
+  background-color: #b48ead;
 }
 
 .footer {
