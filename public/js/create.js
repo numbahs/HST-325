@@ -7,6 +7,7 @@ class NYCViz {
     this.state = {
       data: null,
       currentDay: "01",
+      heuristics: null,
       dataType: "uber" // Uber or Taxi
     };
     this.svg = null;
@@ -25,6 +26,15 @@ class NYCViz {
       this.buttons[1 - num].className = "";
       this.updateState({ dataType: num ? "taxi" : "uber" });
     }
+  }
+
+  handleCircleClass(d) {
+    const [h, m, _] = d.pickup_time.split(":").map(e => parseInt(e));
+    const time = h * 100 + m;
+    if (time > 530 && time <= 1200) return "morning";
+    if (time > 1200 && time <= 1600) return "midday";
+    if (time > 1600 && time <= 2030) return "evening";
+    return "night";
   }
 
   handleZoom(d, i, el) {
@@ -57,7 +67,7 @@ class NYCViz {
       .style("top", d3.event.pageY + 20 + "px")
       .style("display", "block").html(`
           <h3>
-            ${this.state.dataType} Pickup
+            ${this.handleCircleClass(d)} ${this.state.dataType} pickup
           </h3>
           <h4>
             ${dayjs(`${d.pickup_date}`).format("MMMM DD, YYYY")} 
@@ -76,6 +86,12 @@ class NYCViz {
     con.innerHTML = `
         <h2>${this.state.data.length.toLocaleString()} 
         ${this.state.dataType} pickups on ${prettyTime}</h2>
+        <div class="legend">
+          <div class="circle morning">${this.state.heuristics.morning.toLocaleString()} Morning Pickups</div>
+          <div class="circle midday">${this.state.heuristics.midday.toLocaleString()} Midday Pickups</div>
+          <div class="circle evening">${this.state.heuristics.evening.toLocaleString()} Evening Pickups</div>
+          <div class="circle night">${this.state.heuristics.night.toLocaleString()} Night Pickups</div>
+        </div>
         <div id="flatpickr">Change Day</div>`;
     flatpickr("#flatpickr", {
       minDate: "2014-04-01",
@@ -107,7 +123,7 @@ class NYCViz {
           this.projection([lo, la])[1]
       )
       .attr("r", "1px")
-      .attr("class", _ => "pickup_location")
+      .attr("class", d => this.handleCircleClass(d))
       .on("mousemove", this.handleTooltip.bind(this))
       .on("mouseout", () => {
         this.tooltip.style("display", "none");
@@ -123,6 +139,12 @@ class NYCViz {
     );
     this.state = Object.assign({}, this.state, newState, { data });
     this.drawData();
+    this.state.heuristics = {
+      morning: document.getElementsByClassName("morning").length,
+      midday: document.getElementsByClassName("midday").length,
+      evening: document.getElementsByClassName("evening").length,
+      night: document.getElementsByClassName("night").length
+    };
     this.renderInnerControls();
   }
 
